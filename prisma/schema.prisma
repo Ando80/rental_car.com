@@ -1,0 +1,63 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+ 
+generator client {
+  provider =        "prisma-client-js"
+}
+
+model Type {
+  id           String    @id @default(uuid())
+  userId       String
+  title        String @db.Text
+  description  String @db.Text
+  image        String
+  nbrEngin     String?
+
+  engins Engin[]
+  locations Location[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+model Engin{
+  id             String    @id @default(uuid())
+  registration   String
+  puissance      String
+  poids          String
+  image          String
+  enginPrice     Int
+  typeId         String
+
+
+  type   Type?  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+
+  locations Location[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location{
+  id             String    @id @default(uuid())
+  userName       String
+  typeId         String
+  enginId        String
+  typeOwnerId    String
+  startDate      DateTime
+  endDate        DateTime
+  driverIncluded Boolean
+  currency       String
+  totalPrice     Int
+  paymentStatus  Boolean @default(false)
+  paymentIntentId String @unique
+  locationAt      DateTime @default(now())
+
+
+  
+  type   Type?  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  engin   Engin? @relation(fields: [enginId], references: [id], onDelete: Cascade)
+}

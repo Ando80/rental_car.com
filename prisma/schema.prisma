@@ -13,7 +13,6 @@ model Type {
   title        String @db.Text
   description  String @db.Text
   image        String
-  nbrEngin     String?
 
   engins Engin[]
   locations Location[]

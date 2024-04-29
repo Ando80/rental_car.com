@@ -122,8 +122,8 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                 <FormItem>
                   <FormLabel>Image</FormLabel>
 
-                  <div className="flex items-center gap-4">
-                    <FormControl className="flex-2">
+                  <div className="flex items-center gap-6">
+                    <FormControl className="flex-1">
                       <Input
                         type="file"
                         placeholder="iPhone 15"
@@ -149,7 +149,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                       />
                     </FormControl>
                     {field.value ? (
-                      <Avatar className="rounded-sm">
+                      <Avatar className="rounded-sm flex-none w-20">
                         <AvatarFallback>{field.value[0]}</AvatarFallback>
                         <AvatarImage src={field.value} />
                       </Avatar>

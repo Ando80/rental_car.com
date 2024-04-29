@@ -17,7 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Textarea } from "../ui/textarea";
-
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import uploadImageAction from "../upload.action";
+import { Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 interface AddTypeFormProps {
   type: TypeWithEngin | null;
 }
@@ -53,6 +57,21 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
     console.log(values);
   }
 
+  const submitImage = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.set("file", file);
+      const { data, serverError } = await uploadImageAction(formData);
+
+      if (!data || serverError) {
+        toast.error(serverError);
+        return;
+      }
+
+      const url = data.url;
+      form.setValue("image", url);
+    },
+  });
   return (
     <Card>
       <CardHeader>
@@ -92,6 +111,51 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                   <FormControl>
                     <Textarea placeholder="bulldozer is ..." {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+
+                  <div className="flex items-center gap-4">
+                    <FormControl className="flex-2">
+                      <Input
+                        type="file"
+                        placeholder="iPhone 15"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+
+                          if (!file) {
+                            return;
+                          }
+
+                          if (file.size > 1024 * 1024) {
+                            toast.error("File is too big");
+                            return;
+                          }
+
+                          if (!file.type.includes("image")) {
+                            toast.error("File is not an image");
+                            return;
+                          }
+
+                          submitImage.mutate(file);
+                        }}
+                      />
+                    </FormControl>
+                    {field.value ? (
+                      <Avatar className="rounded-sm">
+                        <AvatarFallback>{field.value[0]}</AvatarFallback>
+                        <AvatarImage src={field.value} />
+                      </Avatar>
+                    ) : null}
+                  </div>
+                  <FormDescription>l</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -27,18 +27,30 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import uploadImageAction from "../upload.action";
 import {
-  AwardIcon,
   Eye,
   Loader2,
   Pencil,
   PencilLine,
+  Plus,
+  Terminal,
   Trash,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import axios from "axios";
-import { useToast } from "../ui/use-toast";
+
 import { useRouter } from "next/navigation";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AddEnginForm from "../engin/AddEnginForm";
 
 interface AddTypeFormProps {
   type: TypeWithEngin | null;
@@ -64,6 +76,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isTypeDeleting, setIsTypeDeleting] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -141,6 +154,10 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
       form.setValue("image", url);
     },
   });
+
+  const handleDialogueOpen = () => {
+    setOpen((prev) => !prev);
+  };
   return (
     <>
       <Card>
@@ -232,9 +249,23 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                   </FormItem>
                 )}
               />
+              {type && !type.engins.length && (
+                <Alert className=" text-lime-700 mt-6">
+                  <Terminal className="h-4 w-4 stroke-white" />
+                  <AlertTitle>Une dernière étape!</AlertTitle>
+                  <AlertDescription>
+                    Votre Catégorie a été créé avec succès 🔥
+                    <div>
+                      Veuillez ajouter des engins pour compléter votre
+                      configuration de Catégorie!
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
             </CardContent>
+
             <CardFooter>
-              <div className="flex justify-between gap-64 flex-wrap">
+              <div className="flex justify-between gap-32 flex-wrap">
                 {type && (
                   <Button
                     onClick={() => handleDeleteType(type)}
@@ -265,6 +296,31 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                     {" "}
                     <Eye className="mr-2 h-4 w-4" /> View
                   </Button>
+                )}
+                {type && (
+                  <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="max-w-[150px]"
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Ajouter un Engin
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[900px] w-[90%]">
+                      <DialogHeader className="px-2">
+                        <DialogTitle> Ajouter un Engin</DialogTitle>
+                        <DialogDescription>
+                          Details de l engin
+                        </DialogDescription>
+                      </DialogHeader>
+                      <AddEnginForm
+                        type={type}
+                        handleDialogueOpen={handleDialogueOpen}
+                      />
+                    </DialogContent>
+                  </Dialog>
                 )}
 
                 {type ? (

@@ -25,10 +25,10 @@ model Type {
 model Engin{
   id             String    @id @default(uuid())
   registration   String
-  puissance      Int
   description    String @db.Text
   image          String
   enginPrice     Int
+  driverPrice    Int
   typeId         String
 
 

@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import uploadImageAction from "../upload.action";
 import {
+  Divide,
   Eye,
   Loader2,
   Pencil,
@@ -51,6 +52,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddEnginForm from "../engin/AddEnginForm";
+
+import EnginCard from "../engin/EnginCard";
+import { Separator } from "../ui/separator";
 
 interface AddTypeFormProps {
   type: TypeWithEngin | null;
@@ -305,7 +309,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                         variant="outline"
                         className="max-w-[150px]"
                       >
-                        <Plus className="mr-2 h-4 w-4" /> Ajouter un Engin
+                        <Plus className="mr-2 h-4 w-4" /> Ajouter Engin
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-[900px] w-[90%]">
@@ -353,6 +357,19 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
           </form>
         </Form>
       </Card>
+      <div>
+        {type && !!type.engins.length && (
+          <div>
+            <Separator className="my-6" />
+            <h3 className="text-lg font-semibold my-4">Engin</h3>
+            <div className="grid grid-cols-3 gap-4">
+              {type.engins.map((engin) => {
+                return <EnginCard key={engin.id} type={type} engin={engin} />;
+              })}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };

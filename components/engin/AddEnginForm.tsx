@@ -38,9 +38,6 @@ const formSchema = z.object({
   registration: z.string().min(3, {
     message: "La matriculation est requis",
   }),
-  puissance: z.coerce.number().min(1, {
-    message: "La puissance dois contenir des chiffres",
-  }),
   description: z.string().min(10, {
     message: "La description dois avoir au moins 10 caracteres",
   }),
@@ -49,6 +46,9 @@ const formSchema = z.object({
   }),
   enginPrice: z.coerce.number().min(1, {
     message: "Le prix de l'engin  dois contenir des chiffres",
+  }),
+  driverPrice: z.coerce.number().min(1, {
+    message: "Le prix du chauffeur  dois contenir des chiffres",
   }),
 });
 
@@ -65,10 +65,10 @@ const AddEnginForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: engin || {
       registration: "",
-      puissance: 0,
       description: "",
       image: "",
       enginPrice: 0,
+      driverPrice: 0,
     },
   });
 
@@ -211,15 +211,18 @@ const AddEnginForm = ({
               </FormItem>
             )}
           />
+
           <div className="flex flex-row gap-6">
             <div className="flex-1 flex flex-col gap-6">
               <FormField
                 control={form.control}
-                name="puissance"
+                name="driverPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Puissance *</FormLabel>
-                    <FormDescription>Puissance de la machine</FormDescription>
+                    <FormLabel>Prix chauffeur *</FormLabel>
+                    <FormDescription>
+                      Prix chauffeur pour une durer de 24 heures
+                    </FormDescription>
                     <FormControl>
                       <Input type="number" min={0} {...field} />
                     </FormControl>

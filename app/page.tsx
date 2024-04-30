@@ -1,9 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { getTypes } from "@/actions/getType";
+import TypeList from "@/components/type/TypeList";
 
-export default function Home() {
+interface HomeProps {
+  searchParams: {
+    title: string;
+  };
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const types = await getTypes(searchParams);
+
+  if (!types) return <div> Pas de categories trouver ...</div>;
   return (
     <div>
-      Home Page <Button variant="ghost">Home</Button>
+      <TypeList types={types} />
     </div>
   );
 }

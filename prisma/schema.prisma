@@ -26,7 +26,7 @@ model Engin{
   id             String    @id @default(uuid())
   registration   String
   puissance      Int
-  poids          Int
+  description    String @db.Text
   image          String
   enginPrice     Int
   typeId         String

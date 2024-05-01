@@ -17,7 +17,7 @@ import { Divide, Loader2, Pencil, Plus, Trash, Wand2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Console } from "console";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +31,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { DatePickerWithRange } from "./DateRangePicker";
 import { DateRange } from "react-day-picker";
-import { differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
 import { Checkbox } from "../ui/checkbox";
 import { useAuth } from "@clerk/nextjs";
 import useLocateEngin from "@/hooks/useLocationEngin";
@@ -84,6 +84,23 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const handleDialogueOpen = () => {
     setOpen((prev) => !prev);
   };
+
+  const disabledDates = useMemo(() => {
+    let dates: Date[] = [];
+    const enginLocations = locations.filter(
+      (location) => location.enginId === engin.id
+    );
+
+    enginLocations.forEach((location) => {
+      const range = eachDayOfInterval({
+        start: new Date(location.startDate),
+        end: new Date(location.endDate),
+      });
+      dates = [...dates, ...range];
+    });
+
+    return dates;
+  }, [locations]);
 
   const handleEnginDelete = (engin: Engin) => {
     setIsLoading(true);
@@ -198,7 +215,11 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
             <div className="flex flex-col gap-6">
               <div>
                 <div className="mb-2"> Choisis une date de Location </div>
-                <DatePickerWithRange date={date} setDate={setDate} />
+                <DatePickerWithRange
+                  date={date}
+                  setDate={setDate}
+                  disabledDates={disabledDates}
+                />
               </div>
               {engin.driverPrice > 0 && (
                 <div>

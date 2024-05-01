@@ -36,6 +36,27 @@ export async function POST(req: Request) {
 
   if (foundLocation && payment_intent_id) {
     //update
+    const current_intent = await stripe.paymentIntents.retrieve(
+      payment_intent_id
+    );
+    if (current_intent) {
+      const update_intent = await stripe.paymentIntents.update(
+        payment_intent_id,
+        {
+          amount: location.totalPrice * 100,
+        }
+      );
+
+      const res = await prisma.location.update({
+        where: { paymentIntentId: payment_intent_id, userId: user.id },
+        data: locationData,
+      });
+
+      if (!res) {
+        return NextResponse.error();
+      }
+      return NextResponse.json({ paymentIntent: update_intent });
+    }
   } else {
     //create
     const paymentIntent = await stripe.paymentIntents.create({

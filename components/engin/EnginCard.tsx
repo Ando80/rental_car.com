@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Engin, Location, Type } from "@prisma/client";
@@ -15,7 +17,7 @@ import { Divide, Loader2, Pencil, Plus, Trash } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Console } from "console";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +29,10 @@ import {
 import AddEnginForm from "./AddEnginForm";
 import axios from "axios";
 import { toast } from "sonner";
+import { DatePickerWithRange } from "./DateRangePicker";
+import { DateRange } from "react-day-picker";
+import { differenceInCalendarDays } from "date-fns";
+import { Checkbox } from "../ui/checkbox";
 
 interface EnginCardProps {
   type?: Type & {
@@ -42,7 +48,32 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const isTypeDetailsPage = pathname.includes("type-details");
   const [open, setOpen] = useState(false);
 
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [totalPrice, setTotalPrice] = useState(engin.enginPrice);
+  const [includeDriver, setIncludeDriver] = useState(false);
+  const [days, setDays] = useState(1);
+
   const router = useRouter();
+
+  useEffect(() => {
+    if (date && date.from && date.to) {
+      const dayCount = differenceInCalendarDays(date.to, date.from);
+
+      setDays(dayCount);
+
+      if (dayCount && engin.enginPrice) {
+        if (includeDriver && engin.driverPrice) {
+          setTotalPrice(
+            dayCount * engin.enginPrice + dayCount * engin.enginPrice
+          );
+        } else {
+          setTotalPrice(dayCount * engin.enginPrice);
+        }
+      } else {
+        setTotalPrice(engin.enginPrice);
+      }
+    }
+  }, [date, engin.enginPrice, includeDriver]);
 
   const handleDialogueOpen = () => {
     setOpen((prev) => !prev);
@@ -99,7 +130,30 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
         </CardContent>
         <CardFooter>
           {isTypeDetailsPage ? (
-            <div>Catégorie Details Page</div>
+            <div className="flex flex-col gap-6">
+              <div>
+                <div className="mb-2"> Choisis une date de Location </div>
+                <DatePickerWithRange date={date} setDate={setDate} />
+              </div>
+              {engin.driverPrice > 0 && (
+                <div>
+                  <div className="mb-2">Voulez vous incluez un chauffeur?</div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="driver"
+                      onCheckedChange={(value) => setIncludeDriver(!!value)}
+                    />
+                    <label htmlFor="driver" className="text-sm">
+                      Inclue un chauffeur
+                    </label>
+                  </div>
+                </div>
+              )}
+              <div>
+                Prix Total: <span className="font-bold">{totalPrice}</span>{" "}
+                Ariary pour <span className="font-bold">{days} Jours</span>
+              </div>
+            </div>
           ) : (
             <div className="flex w-full justify-between">
               <Button

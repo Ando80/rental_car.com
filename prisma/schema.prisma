@@ -43,6 +43,7 @@ model Engin{
 model Location{
   id             String    @id @default(uuid())
   userName       String
+  userEmail      String
   userId         String
   typeId         String
   enginId        String

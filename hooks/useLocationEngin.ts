@@ -4,10 +4,10 @@ import { persist } from "zustand/middleware";
 
 interface LocateEnginStore {
   locationEnginData: EnginDataType | null;
-  paymentIntent: string | null;
+  paymentIntentId: string | null;
   clientSecret: string | undefined;
   setEnginData: (data: EnginDataType) => void;
-  setPaymentIntent: (paymentIntent: string) => void;
+  setPaymentIntentId: (paymentIntentId: string) => void;
   setClientSecret: (clientSecret: string) => void;
   resetLocateEngin: () => void;
 }
@@ -24,13 +24,13 @@ const useLocateEngin = create<LocateEnginStore>()(
   persist(
     (set) => ({
       locationEnginData: null,
-      paymentIntent: null,
+      paymentIntentId: null,
       clientSecret: undefined,
       setEnginData: (data: EnginDataType) => {
         set({ locationEnginData: data });
       },
-      setPaymentIntent: (paymentIntent: string) => {
-        set({ paymentIntent });
+      setPaymentIntentId: (paymentIntentId: string) => {
+        set({ paymentIntentId });
       },
       setClientSecret: (clientSecret: string) => {
         set({ clientSecret });
@@ -38,7 +38,7 @@ const useLocateEngin = create<LocateEnginStore>()(
       resetLocateEngin: () => {
         set({
           locationEnginData: null,
-          paymentIntent: null,
+          paymentIntentId: null,
           clientSecret: undefined,
         });
       },

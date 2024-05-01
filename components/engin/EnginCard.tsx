@@ -13,7 +13,7 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
-import { Divide, Loader2, Pencil, Plus, Trash } from "lucide-react";
+import { Divide, Loader2, Pencil, Plus, Trash, Wand2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Console } from "console";
 import { Button } from "../ui/button";
@@ -33,6 +33,8 @@ import { DatePickerWithRange } from "./DateRangePicker";
 import { DateRange } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 import { Checkbox } from "../ui/checkbox";
+import { useAuth } from "@clerk/nextjs";
+import useLocateEngin from "@/hooks/useLocationEngin";
 
 interface EnginCardProps {
   type?: Type & {
@@ -43,7 +45,10 @@ interface EnginCardProps {
 }
 
 const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
+  const { setEnginData, paymentIntentId, setClientSecret, setPaymentIntentId } =
+    useLocateEngin();
   const [isLoading, setIsLoading] = useState(false);
+  const [locationIsLoading, setLocationIsLoading] = useState(false);
   const pathname = usePathname();
   const isTypeDetailsPage = pathname.includes("type-details");
   const [open, setOpen] = useState(false);
@@ -52,6 +57,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const [totalPrice, setTotalPrice] = useState(engin.enginPrice);
   const [includeDriver, setIncludeDriver] = useState(false);
   const [days, setDays] = useState(1);
+  const { userId } = useAuth();
 
   const router = useRouter();
 
@@ -92,6 +98,65 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
         setIsLoading(false);
         toast.error("Il y a une erreur");
       });
+  };
+
+  const handleLocateEngin = () => {
+    if (!userId) return toast.error("oops! Make sure you are logged in");
+
+    if (!type?.userId)
+      return toast.error(
+        "Something went wrong, refresh the page and try again!"
+      );
+
+    if (date?.from && date?.to) {
+      setLocationIsLoading(true);
+
+      const locationEnginData = {
+        engin,
+        totalPrice,
+        driverIncluded: includeDriver,
+        startDate: date.from,
+        endDate: date.to,
+      };
+      setEnginData(locationEnginData);
+
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          location: {
+            typeOwnerId: type.userId,
+            typeId: type.id,
+            enginId: engin.id,
+            startDate: date.from,
+            endDate: date.to,
+            driverIncluded: includeDriver,
+            totalPrice: totalPrice,
+          },
+          payment_intent_id: paymentIntentId,
+        }),
+      })
+        .then((res) => {
+          setLocationIsLoading(false);
+          if (res.status === 401) {
+            return router.push("/login");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setClientSecret(data.paymentIntent.client_secret);
+          setPaymentIntentId(data.paymentIntent.id);
+          router.push("/locate-engin");
+        })
+        .catch((error: any) => {
+          console.log("Error:", error);
+          toast.error(`Error! ${error.message}`);
+        });
+    } else {
+      toast.error("Select a date");
+    }
   };
 
   return (
@@ -153,6 +218,18 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                 Prix Total: <span className="font-bold">{totalPrice}</span>{" "}
                 Ariary pour <span className="font-bold">{days} Jours</span>
               </div>
+              <Button
+                onClick={() => handleLocateEngin()}
+                disabled={locationIsLoading}
+                type="button"
+              >
+                {locationIsLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4" />
+                ) : (
+                  <Wand2 className="mr-2 h-4 w-4" />
+                )}
+                {locationIsLoading ? "Chargement..." : "Louer cette Engin"}
+              </Button>
             </div>
           ) : (
             <div className="flex w-full justify-between">

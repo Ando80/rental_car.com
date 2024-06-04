@@ -16,10 +16,46 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Terminal } from "lucide-react";
+import { Location } from "@prisma/client";
+import { endOfDay, isWithinInterval, startOfDay } from "date-fns";
 
 interface LocationPaymentFormProps {
   clientSecret: string;
   handleSetPaymentSuccess: (value: boolean) => void;
+}
+type DateRangeType = {
+  startDate: Date;
+  endDate: Date;
+};
+
+function hasOverlap(
+  startDate: Date,
+  endDate: Date,
+  dateRanges: DateRangeType[]
+) {
+  const targetInterval = {
+    start: startOfDay(new Date(startDate)),
+    end: endOfDay(new Date(endDate)),
+  };
+
+  for (const range of dateRanges) {
+    const rangeStart = startOfDay(new Date(range.startDate));
+    const rangeEnd = endOfDay(new Date(range.endDate));
+    if (
+      isWithinInterval(targetInterval.start, {
+        start: rangeStart,
+        end: rangeEnd,
+      }) ||
+      isWithinInterval(targetInterval.end, {
+        start: rangeStart,
+        end: rangeEnd,
+      }) ||
+      (targetInterval.start < rangeStart && targetInterval.end > rangeEnd)
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 const LocationPaymentForm = ({
@@ -51,6 +87,30 @@ const LocationPaymentForm = ({
       return;
     }
     try {
+      //date overlaps
+      const locations = await axios.get(
+        `/api/location/${locationEnginData.engin.id}`
+      );
+
+      const dateLocationEngin = locations.data.map((location: Location) => {
+        return {
+          startDate: location.startDate,
+          endDate: location.endDate,
+        };
+      });
+
+      const overlapFound = hasOverlap(
+        locationEnginData.startDate,
+        locationEnginData.endDate,
+        dateLocationEngin
+      );
+      if (overlapFound) {
+        setIsLoading(false);
+        return toast.error(
+          "Oops! Certains date selectionner est deja reserver. Veuillez selectionner autres dates"
+        );
+      }
+
       stripe
         .confirmPayment({
           elements,

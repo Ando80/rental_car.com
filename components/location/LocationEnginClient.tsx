@@ -4,7 +4,7 @@ import { StripeElementsOptions, loadStripe } from "@stripe/stripe-js";
 import EnginCard from "../engin/EnginCard";
 import { Elements } from "@stripe/react-stripe-js";
 import LocationPaymentForm from "./LocationPaymentForm";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,10 @@ const LocationEnginClient = () => {
   const { theme } = useTheme();
   const router = useRouter();
 
+  useEffect(() => {
+    setPageLoaded(true);
+  }, []);
+
   const options: StripeElementsOptions = {
     clientSecret,
     appearance: {
@@ -31,7 +35,7 @@ const LocationEnginClient = () => {
   const handleSetPaymentSuccess = (value: boolean) => {
     setPaymentSuccess(value);
   };
-  if (!paymentSuccess && (!locationEnginData || !clientSecret))
+  if (pageLoaded && !paymentSuccess && (!locationEnginData || !clientSecret))
     return (
       <div className="flex items-center flex-col gap-4">
         <div className="text-rose-500">

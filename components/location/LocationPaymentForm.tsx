@@ -1,0 +1,134 @@
+"use client";
+
+import useLocateEngin from "@/hooks/useLocationEngin";
+import {
+  AddressElement,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { useEffect, useState } from "react";
+import { Separator } from "../ui/separator";
+import moment from "moment";
+import { Button } from "../ui/button";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Terminal } from "lucide-react";
+
+interface LocationPaymentFormProps {
+  clientSecret: string;
+  handleSetPaymentSuccess: (value: boolean) => void;
+}
+
+const LocationPaymentForm = ({
+  clientSecret,
+  handleSetPaymentSuccess,
+}: LocationPaymentFormProps) => {
+  const { locationEnginData, resetLocateEngin } = useLocateEngin();
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+    if (!clientSecret) {
+      return;
+    }
+    handleSetPaymentSuccess(false);
+    setIsLoading(false);
+  }, [stripe, clientSecret, handleSetPaymentSuccess]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!stripe || !elements || !locationEnginData) {
+      return;
+    }
+    try {
+      stripe
+        .confirmPayment({
+          elements,
+          redirect: "if_required",
+        })
+        .then((result) => {
+          if (!result.error) {
+            axios
+              .patch(`/api/location/${result.paymentIntent.id}`)
+              .then((res) => {
+                toast.success("Engin Reserver");
+                router.refresh();
+                resetLocateEngin();
+                handleSetPaymentSuccess(true);
+                setIsLoading(false);
+              })
+              .catch((error) => {
+                console.log(error);
+                toast.error("il y a une erreur");
+                setIsLoading(false);
+              });
+          } else {
+            setIsLoading(false);
+          }
+        });
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
+  if (!locationEnginData?.startDate || !locationEnginData.endDate)
+    return <div>Erreur: Absence de reservation de dates ...</div>;
+
+  const startDate = moment(locationEnginData?.startDate).format("MMMM Do YYYY");
+  const endDate = moment(locationEnginData?.endDate).format("MMMM Do YYYY");
+
+  return (
+    <form onSubmit={handleSubmit} id="payment-form">
+      <h2 className="font-semibold mb-2 text-lg">Adresse de facturation</h2>
+      <AddressElement
+        options={{
+          mode: "billing",
+        }}
+      />
+      <h2 className="font-semibold mb-2 mt-4 text-lg">
+        Information du payement
+      </h2>
+      <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
+      <div className="flex flex-col gap-1">
+        <h2 className="font-semibold mb-1 text-lg">Sommaire</h2>
+        <div>vous enregistrerez le {startDate} a 17 heures </div>
+        <div>vous partirez le {endDate} a 17 heures </div>
+        {locationEnginData?.driverIncluded && <div>le chauffeur anaisaaj</div>}
+      </div>
+      <Separator />
+      <div className="font-bold text-lg">
+        {locationEnginData?.driverIncluded && (
+          <div className="mb-2">
+            Prix Chauffeur: {locationEnginData.engin.driverPrice} Ariary
+          </div>
+        )}
+        Total: {locationEnginData?.totalPrice} Ariary
+      </div>
+
+      {isLoading && (
+        <Alert className=" text-lime-700 mt-6">
+          <Terminal className="h-4 w-4 stroke-white" />
+          <AlertTitle>Processus du payement ... </AlertTitle>
+          <AlertDescription>Rester sur cette page</AlertDescription>
+        </Alert>
+      )}
+
+      <Button disabled={isLoading}>
+        {isLoading ? "PROCESSUS PAYEMENT ..." : "PAYER MAINTENANT"}
+      </Button>
+    </form>
+  );
+};
+
+export default LocationPaymentForm;

@@ -1,5 +1,11 @@
+import LocationEnginClient from "@/components/location/LocationEnginClient";
+
 const LocateEngin = () => {
-  return <div> Location Engin</div>;
+  return (
+    <div className="p-8">
+      <LocationEnginClient />
+    </div>
+  );
 };
 
 export default LocateEngin;

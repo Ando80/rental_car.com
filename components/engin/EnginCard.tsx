@@ -61,6 +61,8 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
 
   const router = useRouter();
 
+  const isLocateEngin = pathname.includes("locate-engin");
+
   useEffect(() => {
     if (date && date.from && date.to) {
       const dayCount = differenceInCalendarDays(date.to, date.from);
@@ -88,7 +90,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
     const enginLocations = locations.filter(
-      (location) => location.enginId === engin.id
+      (location) => location.enginId === engin.id && location.paymentStatus
     );
 
     enginLocations.forEach((location) => {
@@ -210,96 +212,100 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
           </div>
           <Separator />
         </CardContent>
-        <CardFooter>
-          {isTypeDetailsPage ? (
-            <div className="flex flex-col gap-6">
-              <div>
-                <div className="mb-2"> Choisis une date de Location </div>
-                <DatePickerWithRange
-                  date={date}
-                  setDate={setDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
-              {engin.driverPrice > 0 && (
+        {!isLocateEngin && (
+          <CardFooter>
+            {isTypeDetailsPage ? (
+              <div className="flex flex-col gap-6">
                 <div>
-                  <div className="mb-2">Voulez vous incluez un chauffeur?</div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="driver"
-                      onCheckedChange={(value) => setIncludeDriver(!!value)}
-                    />
-                    <label htmlFor="driver" className="text-sm">
-                      Inclue un chauffeur
-                    </label>
-                  </div>
-                </div>
-              )}
-              <div>
-                Prix Total: <span className="font-bold">{totalPrice}</span>{" "}
-                Ariary pour <span className="font-bold">{days} Jours</span>
-              </div>
-              <Button
-                onClick={() => handleLocateEngin()}
-                disabled={locationIsLoading}
-                type="button"
-              >
-                {locationIsLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4" />
-                ) : (
-                  <Wand2 className="mr-2 h-4 w-4" />
-                )}
-                {locationIsLoading ? "Chargement..." : "Louer cette Engin"}
-              </Button>
-            </div>
-          ) : (
-            <div className="flex w-full justify-between">
-              <Button
-                disabled={isLoading}
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  handleEnginDelete(engin);
-                }}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4" />
-                    Deleting...
-                  </>
-                ) : (
-                  <>
-                    <Trash className="mr-2 h-4 w-4" /> Delete
-                  </>
-                )}
-              </Button>
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="max-w-[150px]"
-                  >
-                    <Pencil className="mr-2 h-4 w-4" /> Modifier
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-[900px] w-[90%]">
-                  <DialogHeader className="px-2">
-                    <DialogTitle> Modifier un Engin</DialogTitle>
-                    <DialogDescription>
-                      Faire un changement sur cette engin
-                    </DialogDescription>
-                  </DialogHeader>
-                  <AddEnginForm
-                    type={type}
-                    engin={engin}
-                    handleDialogueOpen={handleDialogueOpen}
+                  <div className="mb-2"> Choisis une date de Location </div>
+                  <DatePickerWithRange
+                    date={date}
+                    setDate={setDate}
+                    disabledDates={disabledDates}
                   />
-                </DialogContent>
-              </Dialog>
-            </div>
-          )}
-        </CardFooter>
+                </div>
+                {engin.driverPrice > 0 && (
+                  <div>
+                    <div className="mb-2">
+                      Voulez vous incluez un chauffeur?
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="driver"
+                        onCheckedChange={(value) => setIncludeDriver(!!value)}
+                      />
+                      <label htmlFor="driver" className="text-sm">
+                        Inclue un chauffeur
+                      </label>
+                    </div>
+                  </div>
+                )}
+                <div>
+                  Prix Total: <span className="font-bold">{totalPrice}</span>{" "}
+                  Ariary pour <span className="font-bold">{days} Jours</span>
+                </div>
+                <Button
+                  onClick={() => handleLocateEngin()}
+                  disabled={locationIsLoading}
+                  type="button"
+                >
+                  {locationIsLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Wand2 className="mr-2 h-4 w-4" />
+                  )}
+                  {locationIsLoading ? "Chargement..." : "Louer cette Engin"}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex w-full justify-between">
+                <Button
+                  disabled={isLoading}
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    handleEnginDelete(engin);
+                  }}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash className="mr-2 h-4 w-4" /> Delete
+                    </>
+                  )}
+                </Button>
+                <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="max-w-[150px]"
+                    >
+                      <Pencil className="mr-2 h-4 w-4" /> Modifier
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[900px] w-[90%]">
+                    <DialogHeader className="px-2">
+                      <DialogTitle> Modifier un Engin</DialogTitle>
+                      <DialogDescription>
+                        Faire un changement sur cette engin
+                      </DialogDescription>
+                    </DialogHeader>
+                    <AddEnginForm
+                      type={type}
+                      engin={engin}
+                      handleDialogueOpen={handleDialogueOpen}
+                    />
+                  </DialogContent>
+                </Dialog>
+              </div>
+            )}
+          </CardFooter>
+        )}
       </Card>
     </>
   );

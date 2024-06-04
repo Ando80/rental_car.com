@@ -4,6 +4,8 @@
 import { Location } from "@prisma/client";
 import { TypeWithEngin } from "./AddTypeForm";
 import EnginCard from "../engin/EnginCard";
+import React from "react";
+import Image from "next/image";
 const TypeDetailsClient = ({
   type,
   locations,
@@ -14,7 +16,7 @@ const TypeDetailsClient = ({
   return (
     <div className="flex flex-col gap-6 pb-2">
       <div className="aspect-square overflow-hidden relative w-full h-[100px] md:h-[400px] rounded-lg">
-        <img src={type.image} alt={type.title} className="w-full h-[400px] " />
+        <Image src={type.image} alt={type.title} width={500} height={400} />
       </div>
       <div>
         <h3 className="font-semibold text-xl md:text-3xl">{type.title}</h3>

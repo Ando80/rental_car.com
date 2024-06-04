@@ -21,11 +21,7 @@ const TypeCard = ({ type }: { type: TypeWithEngin }) => {
     >
       <div className=" flex gap-2 bg-background/50 border border-primary/5 rounded-lg">
         <div className="flex-1 aspect-square overflow-hidden relative w-full h-[210px] object-cover rounded-s-lg">
-          <img
-            src={type.image}
-            alt={type.title}
-            className="w-full h-full object-cover"
-          />
+          <Image src={type.image} alt={type.title} width={400} height={400} />
         </div>
         <div className="flex-1 mt-2">
           <h3 className="font-semibold text-center ">{type.title}</h3>

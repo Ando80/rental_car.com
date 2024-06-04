@@ -19,6 +19,7 @@ export const Providers = (props: ProvidersProps) => {
     >
       <QueryClientProvider client={queryClient}>
         <Toaster />
+
         {props.children}
       </QueryClientProvider>
     </ThemeProvider>

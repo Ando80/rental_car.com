@@ -59,6 +59,6 @@ model Location{
 
 
   
-  type   Type?  @relation(fields: [typeId], references: [id], onDelete: Cascade)
-  engin   Engin? @relation(fields: [enginId], references: [id], onDelete: Cascade)
+  Type   Type?  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  Engin   Engin? @relation(fields: [enginId], references: [id], onDelete: Cascade)
 }

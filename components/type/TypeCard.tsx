@@ -30,7 +30,7 @@ const TypeCard = ({ type }: { type: TypeWithEngin }) => {
           </div>
           {isMyTypes && (
             <Button
-              onClick={() => router.push(`/type${type.id}`)}
+              onClick={() => router.push(`/type/${type.id}`)}
               variant="outline"
             >
               Edit

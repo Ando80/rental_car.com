@@ -1,4 +1,3 @@
-import { Divide } from "lucide-react";
 import { TypeWithEngin } from "./AddTypeForm";
 import TypeCard from "./TypeCard";
 

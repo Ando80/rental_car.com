@@ -167,7 +167,7 @@ const LocationPaymentForm = ({
         {locationEnginData?.driverIncluded && <div>le chauffeur anaisaaj</div>}
       </div>
       <Separator />
-      <div className="font-bold text-lg">
+      <div className="font-bold text-lg mb-4">
         {locationEnginData?.driverIncluded && (
           <div className="mb-2">
             Prix Chauffeur: {locationEnginData.engin.driverPrice} Ariary

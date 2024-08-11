@@ -19,21 +19,24 @@ const TypeCard = ({ type }: { type: TypeWithEngin }) => {
         isMyTypes && "cursor-default"
       )}
     >
-      <div className=" flex gap-2 bg-background/50 border border-primary/5 rounded-lg">
-        <div className="flex-1 aspect-square overflow-hidden relative w-full h-[210px] object-cover rounded-s-lg">
-          <Image src={type.image} alt={type.title} width={400} height={400} />
+      <div className=" w-full flex flex-col gap-2">
+        <div className="relative w-full overflow-hidden rounded-xl aspect-square">
+          <Image
+            className="w-full h-full object-cover group-hover:scale-110 transition"
+            src={type.image}
+            alt={type.title}
+            width={400}
+            height={400}
+          />
         </div>
         <div className="flex-1 mt-2">
-          <h3 className="font-semibold text-center ">{type.title}</h3>
-          <div className="text-primary/90 text-center subpixel-antialiased">
-            {type.description.substring(0, 70)}...
+          <h3 className="font-semibold ml-2">{type.title}</h3>
+          <div className="text-primary/90 subpixel-antialiased ml-2">
+            {type.description.substring(0, 30)}...
           </div>
           {isMyTypes && (
-            <Button
-              onClick={() => router.push(`/type/${type.id}`)}
-              variant="outline"
-            >
-              Edit
+            <Button onClick={() => router.push(`/type/${type.id}`)}>
+              Modifier
             </Button>
           )}
         </div>

@@ -143,8 +143,8 @@ const AddEnginForm = ({
             name="registration"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Matriculation *</FormLabel>
-                <FormDescription>Matriculation de l engin</FormDescription>
+                <FormLabel>Nom *</FormLabel>
+                <FormDescription>Nom</FormDescription>
                 <FormControl>
                   <Input placeholder="A500BM" {...field} />
                 </FormControl>
@@ -237,8 +237,10 @@ const AddEnginForm = ({
                 name="enginPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prix en Ariary *</FormLabel>
-                    <FormDescription>Prix de location</FormDescription>
+                    <FormLabel>Prix de location*</FormLabel>
+                    <FormDescription>
+                      Prix de location pour une durer de 24 heures
+                    </FormDescription>
                     <FormControl>
                       <Input type="number" min={0} {...field} />
                     </FormControl>
@@ -258,11 +260,11 @@ const AddEnginForm = ({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4" /> Updating
+                    <Loader2 className="mr-2 h-4 w-4" /> Modification
                   </>
                 ) : (
                   <>
-                    <PencilLine className="mr-2 h-4 w-4" /> Update
+                    <PencilLine className="mr-2 h-4 w-4" /> Modifié
                   </>
                 )}
               </Button>
@@ -275,11 +277,12 @@ const AddEnginForm = ({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4" /> Creating
+                    <Loader2 className="mr-2 h-4 w-4" />
+                    Création
                   </>
                 ) : (
                   <>
-                    <Pencil className="mr-2 h-4 w-4" /> Create Engin
+                    <Pencil className="mr-2 h-4 w-4" /> Créer
                   </>
                 )}
               </Button>

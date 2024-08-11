@@ -183,7 +183,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Catégorie *</FormLabel>
+                    <FormLabel> Nom de la catégorie *</FormLabel>
                     <FormDescription>Nom de la Catégorie</FormDescription>
                     <FormControl>
                       <Input placeholder="bulldozer" {...field} />
@@ -281,11 +281,11 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                     {isTypeDeleting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4" />
-                        Deleting
+                        Suppression
                       </>
                     ) : (
                       <>
-                        <Trash className="mr-2 h-4 w-4" /> Delete
+                        <Trash className="mr-2 h-4 w-4" /> Supprimer
                       </>
                     )}
                   </Button>
@@ -298,7 +298,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                     type="button"
                   >
                     {" "}
-                    <Eye className="mr-2 h-4 w-4" /> View
+                    <Eye className="mr-2 h-4 w-4" /> Voir
                   </Button>
                 )}
                 {type && (
@@ -316,7 +316,7 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                       <DialogHeader className="px-2">
                         <DialogTitle> Ajouter un Engin</DialogTitle>
                         <DialogDescription>
-                          Details de l engin
+                          Détails de l engin
                         </DialogDescription>
                       </DialogHeader>
                       <AddEnginForm
@@ -331,11 +331,11 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                   <Button className="max-w-[150px]" disabled={isLoading}>
                     {isLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4" /> Updating
+                        <Loader2 className="mr-2 h-4 w-4" /> Modification
                       </>
                     ) : (
                       <>
-                        <PencilLine className="mr-2 h-4 w-4" /> Update
+                        <PencilLine className="mr-2 h-4 w-4" /> Modifié
                       </>
                     )}
                   </Button>
@@ -343,11 +343,11 @@ const AddTypeForm = ({ type }: AddTypeFormProps) => {
                   <Button className="max-w-[150px]" disabled={isLoading}>
                     {isLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4" /> Creating
+                        <Loader2 className="mr-2 h-4 w-4" /> Création
                       </>
                     ) : (
                       <>
-                        <Pencil className="mr-2 h-4 w-4" /> Create Type
+                        <Pencil className="mr-2 h-4 w-4" /> Créer
                       </>
                     )}
                   </Button>

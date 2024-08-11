@@ -162,14 +162,16 @@ const LocationPaymentForm = ({
       <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
       <div className="flex flex-col gap-1">
         <h2 className="font-semibold mb-1 text-lg">Sommaire</h2>
-        <div>vous enregistrerez le {startDate} a 17 heures </div>
-        <div>vous partirez le {endDate} a 17 heures </div>
-        {locationEnginData?.driverIncluded && <div>le chauffeur anaisaaj</div>}
+        <div>Enregistrerez le : {startDate} - 5 heures </div>
+        <div>Terminer le : {endDate} - 17 heures </div>
+        {locationEnginData?.driverIncluded && (
+          <div>le chauffeur est aussi inclus</div>
+        )}
       </div>
       <Separator />
       <div className="font-bold text-lg mb-4">
         {locationEnginData?.driverIncluded && (
-          <div className="mb-2">
+          <div className="mt-2">
             Prix Chauffeur: {locationEnginData.engin.driverPrice} Ariary
           </div>
         )}

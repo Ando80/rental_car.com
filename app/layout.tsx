@@ -24,9 +24,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
+          <NavBar />
           <Providers>
             <main className="flex flex-col min-h-screen bg-secondary">
-              <NavBar />
               <section className="flex-grow">
                 <Container>{children}</Container>
               </section>

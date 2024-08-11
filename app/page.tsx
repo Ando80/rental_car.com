@@ -13,6 +13,10 @@ export default async function Home({ searchParams }: HomeProps) {
   if (!types) return <div> Pas de categories trouver ...</div>;
   return (
     <div>
+      <h1 className="text-4xl font-bold text-neutral-800 pt-3">
+        Nos Catégories
+      </h1>
+
       <TypeList types={types} />
     </div>
   );

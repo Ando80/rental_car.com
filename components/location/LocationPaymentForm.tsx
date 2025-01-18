@@ -165,14 +165,14 @@ const LocationPaymentForm = ({
         <div>Enregistrerez le : {startDate} - 5 heures </div>
         <div>Terminer le : {endDate} - 17 heures </div>
         {locationEnginData?.driverIncluded && (
-          <div>le chauffeur est aussi inclus</div>
+          <div>le moniteur est aussi inclus</div>
         )}
       </div>
       <Separator />
       <div className="font-bold text-lg mb-4">
         {locationEnginData?.driverIncluded && (
           <div className="mt-2">
-            Prix Chauffeur: {locationEnginData.engin.driverPrice} Ariary
+            Prix moniteur: {locationEnginData.engin.driverPrice} Ariary
           </div>
         )}
         Total: {locationEnginData?.totalPrice} Ariary

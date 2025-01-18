@@ -48,7 +48,7 @@ const formSchema = z.object({
     message: "Le prix de l'engin  dois contenir des chiffres",
   }),
   driverPrice: z.coerce.number().min(1, {
-    message: "Le prix du chauffeur  dois contenir des chiffres",
+    message: "Le prix du moniteur  dois contenir des chiffres",
   }),
 });
 
@@ -219,9 +219,9 @@ const AddEnginForm = ({
                 name="driverPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prix chauffeur *</FormLabel>
+                    <FormLabel>Prix moniteur *</FormLabel>
                     <FormDescription>
-                      Prix chauffeur pour une durer de 24 heures
+                      Prix moniteur pour une durer de 24 heures
                     </FormDescription>
                     <FormControl>
                       <Input type="number" min={0} {...field} />

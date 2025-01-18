@@ -205,7 +205,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
             </div>
             {!!engin.driverPrice && (
               <div>
-                Prix chauffeur:{" "}
+                Prix moniteur:{" "}
                 <span className="font-bold">{engin.driverPrice} Ariary</span>
               </div>
             )}
@@ -226,16 +226,14 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                 </div>
                 {engin.driverPrice > 0 && (
                   <div>
-                    <div className="mb-2">
-                      Voulez vous incluez un chauffeur?
-                    </div>
+                    <div className="mb-2">Voulez vous incluez un moniteur?</div>
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="driver"
                         onCheckedChange={(value) => setIncludeDriver(!!value)}
                       />
                       <label htmlFor="driver" className="text-sm">
-                        Inclue un chauffeur
+                        Inclue un moniteur
                       </label>
                     </div>
                   </div>

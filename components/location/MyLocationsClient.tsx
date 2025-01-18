@@ -128,7 +128,7 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
             </div>
             {!!Engin.driverPrice && (
               <div>
-                Prix chauffeur:{" "}
+                Prix moniteur:{" "}
                 <span className="font-bold">{Engin.driverPrice} Ariary</span>
               </div>
             )}
@@ -144,7 +144,7 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
               <div>enregistrement: {startDate} a 5heures</div>
               <div>vérifier: {endDate} a 17heures</div>
               {location.driverIncluded && (
-                <div>Le chauffeur est inclus dans votre offre</div>
+                <div>Le moniteur est inclus dans votre offre</div>
               )}
               {location.paymentStatus ? (
                 <div className="text-teal-500">

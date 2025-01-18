@@ -7,16 +7,11 @@ export async function PATCH(
   { params }: { params: { Id: string } }
 ) {
   try {
-    const { userId } = auth();
-
     if (!params.Id) {
-      return new NextResponse("le payement est requis", { status: 400 });
+      return new NextResponse("Le paiement est requis", { status: 400 });
     }
 
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
+    // On ne vérifie plus l'authentification pour la mise à jour du paiement
     const location = await prisma.location.update({
       where: {
         paymentIntentId: params.Id,
@@ -39,11 +34,13 @@ export async function DELETE(
     const { userId } = auth();
 
     if (!params.Id) {
-      return new NextResponse("l'Id du location est requis", { status: 400 });
+      return new NextResponse("L'ID de la location est requis", {
+        status: 400,
+      });
     }
 
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!userId && !req.headers.get("Authorization")) {
+      return new NextResponse("Authentification requise", { status: 401 });
     }
 
     const location = await prisma.location.delete({
@@ -55,39 +52,6 @@ export async function DELETE(
     return NextResponse.json(location);
   } catch (error) {
     console.log("Error at /api/location/Id DELETE", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
-}
-export async function GET(
-  req: Request,
-  { params }: { params: { Id: string } }
-) {
-  try {
-    const { userId } = auth();
-
-    if (!params.Id) {
-      return new NextResponse("l'Id du Type est requis", { status: 400 });
-    }
-
-    if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const locations = await prisma.location.findMany({
-      where: {
-        paymentStatus: true,
-        enginId: params.Id,
-        endDate: {
-          gt: yesterday,
-        },
-      },
-    });
-
-    return NextResponse.json(locations);
-  } catch (error) {
-    console.log("Error at /api/location/Id GET", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

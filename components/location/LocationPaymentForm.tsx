@@ -86,8 +86,9 @@ const LocationPaymentForm = ({
     if (!stripe || !elements || !locationEnginData) {
       return;
     }
+
     try {
-      //date overlaps
+      // Vérifier les dates de chevauchement sans dépendre de l'authentification
       const locations = await axios.get(
         `/api/location/${locationEnginData.engin.id}`
       );
@@ -107,10 +108,11 @@ const LocationPaymentForm = ({
       if (overlapFound) {
         setIsLoading(false);
         return toast.error(
-          "Oops! Certains date selectionner est deja reserver. Veuillez selectionner autres dates"
+          "Oops! Certaines dates sélectionnées sont déjà réservées. Veuillez choisir d'autres dates."
         );
       }
 
+      // Effectuer le paiement sans dépendre de l'authentification
       stripe
         .confirmPayment({
           elements,
@@ -121,7 +123,7 @@ const LocationPaymentForm = ({
             axios
               .patch(`/api/location/${result.paymentIntent.id}`)
               .then((res) => {
-                toast.success("Engin Reserver");
+                toast.success("Engin réservé");
                 router.refresh();
                 resetLocateEngin();
                 handleSetPaymentSuccess(true);
@@ -129,7 +131,7 @@ const LocationPaymentForm = ({
               })
               .catch((error) => {
                 console.log(error);
-                toast.error("il y a une erreur");
+                toast.error("Une erreur est survenue");
                 setIsLoading(false);
               });
           } else {
@@ -143,7 +145,7 @@ const LocationPaymentForm = ({
   };
 
   if (!locationEnginData?.startDate || !locationEnginData.endDate)
-    return <div>Erreur: Absence de reservation de dates ...</div>;
+    return <div>Erreur: Absence de réservation de dates ...</div>;
 
   const startDate = moment(locationEnginData?.startDate).format("MMMM Do YYYY");
   const endDate = moment(locationEnginData?.endDate).format("MMMM Do YYYY");
@@ -157,15 +159,15 @@ const LocationPaymentForm = ({
         }}
       />
       <h2 className="font-semibold mb-2 mt-4 text-lg">
-        Information du payement
+        Informations de paiement
       </h2>
       <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
       <div className="flex flex-col gap-1">
         <h2 className="font-semibold mb-1 text-lg">Sommaire</h2>
-        <div>Enregistrerez le : {startDate} - 5 heures </div>
-        <div>Terminer le : {endDate} - 17 heures </div>
+        <div>Enregistré le : {startDate} - 5 heures </div>
+        <div>Terminé le : {endDate} - 17 heures </div>
         {locationEnginData?.driverIncluded && (
-          <div>le moniteur est aussi inclus</div>
+          <div>Le moniteur est aussi inclus</div>
         )}
       </div>
       <Separator />
@@ -181,8 +183,8 @@ const LocationPaymentForm = ({
       {isLoading && (
         <Alert className=" text-lime-700 mt-6">
           <Terminal className="h-4 w-4 stroke-white" />
-          <AlertTitle>Processus du payement ... </AlertTitle>
-          <AlertDescription>Rester sur cette page</AlertDescription>
+          <AlertTitle>Processus du paiement ... </AlertTitle>
+          <AlertDescription>Restez sur cette page</AlertDescription>
         </Alert>
       )}
 

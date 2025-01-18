@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -8,20 +7,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 export async function POST(req: Request) {
-  const user = await currentUser();
-
-  if (!user) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
+  // Nous n'utilisons plus `currentUser` pour autoriser l'authentification
   const body = await req.json();
-  const { location, payment_intent_id } = body;
+  const { location, payment_intent_id, userInfo } = body;
 
+  // Si aucune information utilisateur n'est donnée, utilisez des valeurs par défaut
   const locationData = {
     ...location,
-    userName: user.firstName,
-    userEmail: user.emailAddresses[0].emailAddress,
-    userId: user.id,
+    userName: userInfo?.firstName || "Anonyme",
+    userEmail: userInfo?.email || "anonymous@example.com",
+    userId: userInfo?.id || "guest", // Remplacer l'ID utilisateur par "guest" si non authentifié
     currency: "usd",
     paymentIntentId: payment_intent_id,
   };
@@ -30,12 +25,15 @@ export async function POST(req: Request) {
 
   if (payment_intent_id) {
     foundLocation = await prisma.location.findUnique({
-      where: { paymentIntentId: payment_intent_id, userId: user.id },
+      where: {
+        paymentIntentId: payment_intent_id,
+        userId: userInfo?.id || "guest",
+      },
     });
   }
 
   if (foundLocation && payment_intent_id) {
-    //update
+    // Mise à jour de l'intention de paiement
     const current_intent = await stripe.paymentIntents.retrieve(
       payment_intent_id
     );
@@ -48,7 +46,10 @@ export async function POST(req: Request) {
       );
 
       const res = await prisma.location.update({
-        where: { paymentIntentId: payment_intent_id, userId: user.id },
+        where: {
+          paymentIntentId: payment_intent_id,
+          userId: userInfo?.id || "guest",
+        },
         data: locationData,
       });
 
@@ -58,7 +59,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ paymentIntent: update_intent });
     }
   } else {
-    //create
+    // Créer un nouveau payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: location.totalPrice * 100,
       currency: locationData.currency,

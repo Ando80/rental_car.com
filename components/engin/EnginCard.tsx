@@ -28,7 +28,6 @@ import axios from "axios";
 import { toast } from "sonner";
 import { DatePickerWithRange } from "./DateRangePicker"; // Import du composant de sélection de date unique
 import { Checkbox } from "../ui/checkbox";
-import { useAuth } from "@clerk/nextjs";
 import useLocateEngin from "@/hooks/useLocationEngin";
 
 interface EnginCardProps {
@@ -52,7 +51,6 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const [totalPrice, setTotalPrice] = useState(engin.enginPrice);
   const [includeDriver, setIncludeDriver] = useState(false);
   const [days, setDays] = useState(1);
-  const { userId } = useAuth();
 
   const router = useRouter();
 
@@ -104,62 +102,63 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   };
 
   const handleLocateEngin = () => {
-    if (!userId) return toast.error("oops! Make sure you are logged in");
+    // Vérification de la date sélectionnée
+    if (!date) {
+      toast.error("Select a date");
+      return;
+    }
 
-    if (!type?.userId)
-      return toast.error(
-        "Something went wrong, refresh the page and try again!"
-      );
+    setLocationIsLoading(true);
 
-    if (date) {
-      setLocationIsLoading(true);
+    const locationEnginData = {
+      engin,
+      totalPrice,
+      driverIncluded: includeDriver,
+      startDate: date,
+      endDate: date,
+    };
+    setEnginData(locationEnginData);
 
-      const locationEnginData = {
-        engin,
-        totalPrice,
-        driverIncluded: includeDriver,
-        startDate: date,
-        endDate: date,
-      };
-      setEnginData(locationEnginData);
-
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    fetch("/api/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        location: {
+          typeOwnerId: type?.userId || "", // Si type?.userId est undefined, on l'ignore
+          typeId: type?.id,
+          enginId: engin.id,
+          startDate: date,
+          endDate: date,
+          driverIncluded: includeDriver,
+          totalPrice: totalPrice,
         },
-        body: JSON.stringify({
-          location: {
-            typeOwnerId: type.userId,
-            typeId: type.id,
-            enginId: engin.id,
-            startDate: date,
-            endDate: date,
-            driverIncluded: includeDriver,
-            totalPrice: totalPrice,
-          },
-          payment_intent_id: paymentIntentId,
-        }),
+      }),
+    })
+      .then((res) => {
+        setLocationIsLoading(false);
+
+        if (!res.ok) {
+          toast.error("Something went wrong, please try again.");
+          return;
+        }
+
+        return res.json();
       })
-        .then((res) => {
-          setLocationIsLoading(false);
-          if (res.status === 401) {
-            return router.push("/login");
-          }
-          return res.json();
-        })
-        .then((data) => {
+      .then((data) => {
+        if (data?.paymentIntent) {
           setClientSecret(data.paymentIntent.client_secret);
           setPaymentIntentId(data.paymentIntent.id);
           router.push("/locate-engin");
-        })
-        .catch((error: any) => {
-          console.log("Error:", error);
-          toast.error(`Error! ${error.message}`);
-        });
-    } else {
-      toast.error("Select a date");
-    }
+        } else {
+          toast.error("Failed to create payment intent");
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+        toast.error(`Error! ${error.message}`);
+      });
   };
 
   return (

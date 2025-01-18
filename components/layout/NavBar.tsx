@@ -24,12 +24,17 @@ const NavBar = () => {
             <div className="flex gap-3 items-center">ProTender</div>
           </div>
           <SearchInput />
+
           <div className="flex gap-3 items-center">
-            <div>
-              <ModeToggle />
-              <NavMenu />
-            </div>
-            <UserButton afterSignOutUrl="/" />
+            {userId && (
+              <>
+                <div>
+                  <ModeToggle />
+                  <NavMenu />
+                </div>
+                <UserButton afterSignOutUrl="/" />
+              </>
+            )}
             {!userId && (
               <>
                 <Button

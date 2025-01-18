@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Engin, Location, Type } from "@prisma/client";
@@ -13,9 +11,8 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
-import { Divide, Loader2, Pencil, Plus, Trash, Wand2 } from "lucide-react";
+import { Loader2, Pencil, Trash, Wand2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { Console } from "console";
 import { Button } from "../ui/button";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -29,11 +26,8 @@ import {
 import AddEnginForm from "./AddEnginForm";
 import axios from "axios";
 import { toast } from "sonner";
-import { DatePickerWithRange } from "./DateRangePicker";
-import { DateRange } from "react-day-picker";
-import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
+import { DatePickerWithRange } from "./DateRangePicker"; // Import du composant de sélection de date unique
 import { Checkbox } from "../ui/checkbox";
-import { useAuth } from "@clerk/nextjs";
 import useLocateEngin from "@/hooks/useLocationEngin";
 
 interface EnginCardProps {
@@ -53,33 +47,24 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   const isTypeDetailsPage = pathname.includes("type-details");
   const [open, setOpen] = useState(false);
 
-  const [date, setDate] = useState<DateRange | undefined>();
+  const [date, setDate] = useState<Date | undefined>(); // Modification: Utilisation d'une seule date
   const [totalPrice, setTotalPrice] = useState(engin.enginPrice);
   const [includeDriver, setIncludeDriver] = useState(false);
   const [days, setDays] = useState(1);
-  const { userId } = useAuth();
 
   const router = useRouter();
 
   const isLocateEngin = pathname.includes("locate-engin");
 
   useEffect(() => {
-    if (date && date.from && date.to) {
-      const dayCount = differenceInCalendarDays(date.to, date.from);
-
-      setDays(dayCount);
-
-      if (dayCount && engin.enginPrice) {
-        if (includeDriver && engin.driverPrice) {
-          setTotalPrice(
-            dayCount * engin.enginPrice + dayCount * engin.enginPrice
-          );
-        } else {
-          setTotalPrice(dayCount * engin.enginPrice);
-        }
+    if (date && engin.enginPrice) {
+      if (includeDriver && engin.driverPrice) {
+        setTotalPrice(engin.enginPrice + engin.driverPrice);
       } else {
         setTotalPrice(engin.enginPrice);
       }
+    } else {
+      setTotalPrice(engin.enginPrice);
     }
   }, [date, engin.enginPrice, includeDriver]);
 
@@ -94,11 +79,8 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
     );
 
     enginLocations.forEach((location) => {
-      const range = eachDayOfInterval({
-        start: new Date(location.startDate),
-        end: new Date(location.endDate),
-      });
-      dates = [...dates, ...range];
+      const range = new Date(location.startDate);
+      dates.push(range);
     });
 
     return dates;
@@ -111,7 +93,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
       .delete(`/api/engin/${engin.id}`)
       .then(() => {
         router.refresh();
-        toast.success("Engin supprimer");
+        toast.success("Engin supprimé");
       })
       .catch(() => {
         setIsLoading(false);
@@ -120,62 +102,63 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
   };
 
   const handleLocateEngin = () => {
-    if (!userId) return toast.error("oops! Make sure you are logged in");
+    // Vérification de la date sélectionnée
+    if (!date) {
+      toast.error("Select a date");
+      return;
+    }
 
-    if (!type?.userId)
-      return toast.error(
-        "Something went wrong, refresh the page and try again!"
-      );
+    setLocationIsLoading(true);
 
-    if (date?.from && date?.to) {
-      setLocationIsLoading(true);
+    const locationEnginData = {
+      engin,
+      totalPrice,
+      driverIncluded: includeDriver,
+      startDate: date,
+      endDate: date,
+    };
+    setEnginData(locationEnginData);
 
-      const locationEnginData = {
-        engin,
-        totalPrice,
-        driverIncluded: includeDriver,
-        startDate: date.from,
-        endDate: date.to,
-      };
-      setEnginData(locationEnginData);
-
-      fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    fetch("/api/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        location: {
+          typeOwnerId: type?.userId || "", // Si type?.userId est undefined, on l'ignore
+          typeId: type?.id,
+          enginId: engin.id,
+          startDate: date,
+          endDate: date,
+          driverIncluded: includeDriver,
+          totalPrice: totalPrice,
         },
-        body: JSON.stringify({
-          location: {
-            typeOwnerId: type.userId,
-            typeId: type.id,
-            enginId: engin.id,
-            startDate: date.from,
-            endDate: date.to,
-            driverIncluded: includeDriver,
-            totalPrice: totalPrice,
-          },
-          payment_intent_id: paymentIntentId,
-        }),
+      }),
+    })
+      .then((res) => {
+        setLocationIsLoading(false);
+
+        if (!res.ok) {
+          toast.error("Something went wrong, please try again.");
+          return;
+        }
+
+        return res.json();
       })
-        .then((res) => {
-          setLocationIsLoading(false);
-          if (res.status === 401) {
-            return router.push("/login");
-          }
-          return res.json();
-        })
-        .then((data) => {
+      .then((data) => {
+        if (data?.paymentIntent) {
           setClientSecret(data.paymentIntent.client_secret);
           setPaymentIntentId(data.paymentIntent.id);
           router.push("/locate-engin");
-        })
-        .catch((error: any) => {
-          console.log("Error:", error);
-          toast.error(`Error! ${error.message}`);
-        });
-    } else {
-      toast.error("Select a date");
-    }
+        } else {
+          toast.error("Failed to create payment intent");
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+        toast.error(`Error! ${error.message}`);
+      });
   };
 
   return (
@@ -217,7 +200,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
             {isTypeDetailsPage ? (
               <div className="flex flex-col gap-6">
                 <div>
-                  <div className="mb-2"> Choisis une date de Location </div>
+                  <div className="mb-2"> Choisissez une date de Location </div>
                   <DatePickerWithRange
                     date={date}
                     setDate={setDate}
@@ -226,21 +209,21 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                 </div>
                 {engin.driverPrice > 0 && (
                   <div>
-                    <div className="mb-2">Voulez vous incluez un moniteur?</div>
+                    <div className="mb-2">Voulez vous inclure un moniteur?</div>
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="driver"
                         onCheckedChange={(value) => setIncludeDriver(!!value)}
                       />
                       <label htmlFor="driver" className="text-sm">
-                        Inclue un moniteur
+                        Inclure un moniteur
                       </label>
                     </div>
                   </div>
                 )}
                 <div>
                   Prix Total: <span className="font-bold">{totalPrice}</span>{" "}
-                  Ariary pour <span className="font-bold">{days} Jours</span>
+                  Ariary pour <span className="font-bold">1 Jour</span>
                 </div>
                 <Button
                   onClick={() => handleLocateEngin()}
@@ -252,7 +235,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                   ) : (
                     <Wand2 className="mr-2 h-4 w-4" />
                   )}
-                  {locationIsLoading ? "Chargement..." : "Louer cette Engin"}
+                  {locationIsLoading ? "Chargement..." : "Louer cet Engin"}
                 </Button>
               </div>
             ) : (

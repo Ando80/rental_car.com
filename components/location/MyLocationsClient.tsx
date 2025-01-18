@@ -33,7 +33,7 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
   const router = useRouter();
   const { Type, Engin } = location;
 
-  if (!Type || !Engin) return <div>Absence de donnee...</div>;
+  if (!Type || !Engin) return <div>Absence de donnée...</div>;
 
   const startDate = moment(location.startDate).format("MMMM Do YYYY");
   const endDate = moment(location.endDate).format("MMMM Do YYYY");
@@ -43,11 +43,12 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
   );
 
   const handleLocateEngin = () => {
-    if (!userId) return toast.error("oops! Make sure you are logged in");
+    if (!userId)
+      return toast.error("Oops! Assurez-vous que vous êtes connecté.");
 
     if (!Type?.userId)
       return toast.error(
-        "Something went wrong, refresh the page and try again!"
+        "Une erreur s'est produite, veuillez actualiser la page."
       );
 
     setLocationIsLoading(true);
@@ -93,7 +94,7 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
       })
       .catch((error: any) => {
         console.log("Error:", error);
-        toast.error(`Error! ${error.message}`);
+        toast.error(`Erreur! ${error.message}`);
       });
   };
 
@@ -123,7 +124,7 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
           <div className="flex gap-4 justify-between">
             <div>
               Prix de location:{" "}
-              <span className=" font-bold">{Engin.enginPrice} Ariary</span>
+              <span className="font-bold">{Engin.enginPrice} Ariary</span>
               <span className="text-xs">/24hrs</span>
             </div>
             {!!Engin.driverPrice && (
@@ -138,22 +139,21 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
             <CardTitle>Details des locations</CardTitle>
             <div className="text-primary/90">
               <div>
-                Engin louer par {location.userName} pour {dayCount} jours -{" "}
-                {moment(location.locationAt).fromNow()}{" "}
+                Engin loué par {location.userName} pour {dayCount} jours -{" "}
+                {moment(location.locationAt).fromNow()}
               </div>
-              <div>enregistrement: {startDate} a 5heures</div>
-              <div>vérifier: {endDate} a 17heures</div>
+              <div>enregistrement: {startDate} à 5h00</div>
+              <div>vérification: {endDate} à 17h00</div>
               {location.driverIncluded && (
                 <div>Le moniteur est inclus dans votre offre</div>
               )}
               {location.paymentStatus ? (
                 <div className="text-teal-500">
-                  {" "}
-                  Payer {location.totalPrice} Ariary - Engin Reserver
+                  Payé {location.totalPrice} Ariary - Engin Réservé
                 </div>
               ) : (
                 <div className="text-rose-500">
-                  Non Payer {location.totalPrice} Ariary - Engin Non Reserver
+                  Non payé {location.totalPrice} Ariary - Engin Non Réservé
                 </div>
               )}
             </div>
@@ -165,14 +165,14 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
             variant="outline"
             onClick={() => router.push(`/type-details/${Type.id}`)}
           >
-            Voir cette categorie
+            Voir cette catégorie
           </Button>
           {!location.paymentStatus && location.userId === userId && (
             <Button
               disabled={locationIsLoading}
               onClick={() => handleLocateEngin()}
             >
-              {locationIsLoading ? "Processus ..." : " Payer maintenant"}
+              {locationIsLoading ? "En cours ..." : " Payer maintenant"}
             </Button>
           )}
         </CardFooter>

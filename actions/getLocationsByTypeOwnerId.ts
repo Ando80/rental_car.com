@@ -5,14 +5,15 @@ export const getLocationByTypeOwnerId = async () => {
   try {
     const { userId } = auth();
 
+    let whereCondition = {};
+
+    // Vérifier si l'utilisateur n'est pas authentifié
     if (!userId) {
-      throw new Error("Non Autoriser");
+      whereCondition = { typeOwnerId: null }; // Filtrer pour les locations des utilisateurs non authentifiés
     }
 
     const locations = await prisma.location.findMany({
-      where: {
-        typeOwnerId: userId,
-      },
+      where: whereCondition,
       include: {
         Engin: true,
         Type: true,
@@ -22,7 +23,7 @@ export const getLocationByTypeOwnerId = async () => {
       },
     });
 
-    if (!locations) return null;
+    if (!locations || locations.length === 0) return null;
 
     return locations;
   } catch (error: any) {

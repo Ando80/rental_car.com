@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CalendarIcon } from "lucide-react";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -16,8 +16,8 @@ import {
 
 interface DatePickerProps {
   className?: React.HTMLAttributes<HTMLDivElement>;
-  date: DateRange | undefined;
-  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+  date: Date | undefined;
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
   disabledDates: Date[];
 }
 
@@ -40,29 +40,16 @@ export function DatePickerWithRange({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Prendre une date</span>
-            )}
+            {date ? format(date, "LLL dd, y") : <span>Prendre une date</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             initialFocus
-            mode="range"
-            defaultMonth={date?.from}
-            fromDate={new Date()}
+            mode="single"
+            defaultMonth={date}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
             disabled={disabledDates}
           />
         </PopoverContent>

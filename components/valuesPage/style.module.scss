@@ -1,0 +1,64 @@
+.values {
+  .our-experience-widget {
+    .section-title,
+    .section-caption {
+      color: white;
+    }
+  }
+}
+.experience {
+  background-image: url("/background/process.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.experience > div {
+  border-radius: 12px;
+  text-align: left;
+  padding: 2rem;
+}
+
+.experience .text-white {
+  color: white;
+}
+
+.experience h1 {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 36px;
+}
+
+.experience p {
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
+
+.valueTitle {
+  font-weight: 900;
+  font-size: 46px;
+  color: rgb(75, 4, 190);
+  text-transform: uppercase;
+}
+.valueDesc {
+  margin-top: 16px;
+  color: rgb(8, 8, 61);
+}
+.title {
+  font-weight: 900;
+  font-size: 46px;
+  color: rgb(75, 4, 190);
+  text-transform: uppercase;
+  margin-top: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: -66px;
+}
+
+.image {
+  margin-top: -7rem !important;
+}

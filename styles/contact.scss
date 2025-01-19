@@ -1,0 +1,26 @@
+.contact-page {
+  .contact-form {
+    .section-title,
+    .section-caption {
+      @apply text-white;
+    }
+    .form-submit-button {
+      @apply mt-6 w-full rounded border border-white py-1 text-center text-sm font-thin uppercase text-white;
+    }
+
+    div.MuiFormControl-root {
+      @apply w-full;
+      label {
+        @apply text-white;
+      }
+
+      div.MuiInputBase-root {
+        color: white;
+
+        &::before {
+          @apply border-white/[0.5];
+        }
+      }
+    }
+  }
+}

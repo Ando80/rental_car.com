@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  // Global Page Alignment
+  .padded {
+    @apply container mx-auto py-4 mdTab:py-6;
+  }
+  .whitespace-pre {
+    white-space: nowrap;
+  }
+
+  .y-spacer {
+    @apply py-6;
+  }
+
+  .section-spacer {
+    @apply py-8 md:py-16;
+  }
+  .outer-spacer {
+    @apply my-6 md:my-16;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(92deg, #e82eff 0%, #61168f 40%, #1c0a56 100%) 0%
+      0%;
+
+    @apply transition-all;
+  }
+
+  .pink-gradient {
+    background: linear-gradient(112deg, #e82eff 0%, #70199b 17%, #1c0a56 100%)
+      0% 0% no-repeat padding-box;
+  }
+
+  .light-panel-bg {
+    @apply rounded--30 w-full bg-primary-light-gray/[0.2];
+  }
+
+  .screen-height {
+    height: calc(100vh - var(--header-height));
+  }
+  .min-screen-height {
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  .safe-zone {
+    @apply mx-0  mt-20 w-full px-0;
+  }
+  .x-padded {
+    @apply px-4;
+  }
+  .rounded--20 {
+    @apply rounded-[20px];
+  }
+  .rounded--30 {
+    @apply rounded-[30px];
+  }
+
+  .aspect--5-4 {
+    aspect-ratio: 5 / 4;
+  }
+
+  .whitespace-pre-line {
+    white-space: pre-line;
+  }
+
+  .text--headline {
+    // azo
+    font-family: "azo Sans Black";
+    @apply text-3xl font-medium sm:text-3xl  md:text-7xl lg:text-8xl;
+  }
+  .text--title {
+    // azo
+    font-family: "azo Sans Black";
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  .text--24 {
+    font-family: "Open Sans", sans-serif;
+    @apply text-base font-normal leading-[20px] md:text-lg md:leading-[30px];
+  }
+  .text--24-bold {
+    font-family: "Open Sans", sans-serif;
+    @apply text-base font-bold leading-[20px] md:text-lg md:leading-[30px];
+  }
+  .text--subtitle {
+    // azo
+    font-family: "azo Sans Light";
+    @apply text-2xl text-[12px] md:text-[24px];
+  }
+  .text--section-caption {
+    font-family: "Open Sans", sans-serif;
+    letter-spacing: 6.3px;
+    @apply text-base text-[12px] md:text-2xl md:text-[20px];
+  }
+  .text--body {
+    font-family: "Open Sans", sans-serif;
+    @apply text-[12px] leading-[20px]  md:text-base md:leading-[30px];
+  }
+  .text--body-small {
+    font-family: "Open Sans", sans-serif;
+    @apply text-[8px] md:text-sm;
+  }
+  .text--button {
+    font-family: "Open Sans", sans-serif;
+    letter-spacing: 5.85px;
+    @apply text-sm leading-[26px] md:text-base;
+  }
+}
+
+@import "./variables.scss";
+@import "./cards.scss";

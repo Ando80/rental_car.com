@@ -1,0 +1,27 @@
+.reqest {
+  background-image: url("/background/process.png");
+  height: 30vh;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+.title {
+  font-size: 38px;
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+}
+.subtitle {
+  font-size: 14px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: white;
+}
+.footer {
+  min-width: 115%;
+  min-height: 70px;
+  margin-left: -80px !important;
+  margin-bottom: -22px;
+}

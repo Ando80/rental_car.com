@@ -1,0 +1,118 @@
+.project-card {
+  border-radius: 20px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: var(--elevation-dark-3);
+
+    figure img {
+      transform: scale(1.05);
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+
+  &:hover > .description_overflow {
+    @apply translate-y-0;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+
+    @screen sm {
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    @screen md {
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+    }
+
+    @screen lg {
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+    }
+  }
+
+  .description_title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  &:hover > .description_overflow {
+    @apply translate-y-0;
+  }
+
+  &:hover {
+    @apply scale-[0.98];
+    figure img {
+      @apply scale-105;
+    }
+  }
+}
+
+.home-news-card {
+  &:hover {
+    img {
+      @apply scale-105;
+    }
+
+    .null-text-button {
+      @apply scale-100;
+    }
+  }
+
+  .title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @apply block w-[300px] overflow-hidden;
+  }
+
+  .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.recent-post-th {
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.quote-form {
+  div.MuiFormControl-root {
+    @apply w-full min-w-[230px];
+    label {
+      @apply text-primary-pink;
+    }
+
+    div.MuiInputBase-root {
+      @apply text-primary-pink;
+
+      &::before {
+        @apply border-secondary-pink;
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+.null-button {
+  @apply text--button z-30 w-[max-content] rounded py-3 px-8 uppercase text-white;
+  @apply cursor-pointer;
+
+  &:hover {
+    @apply scale-105 shadow-elevation-dark-1;
+  }
+
+  &:active {
+    @apply scale-90;
+  }
+
+  &.gradient {
+    @apply gradient-bg;
+  }
+
+  &.blue {
+    @apply bg-primary-blue;
+  }
+
+  &.transparent {
+    @apply border border-white bg-transparent;
+  }
+}
+
+  .divPagination{
+    .MuiPaginationItem-root {
+      font-size: 19px;
+      margin-right: 20px;
+      width: 60px;
+      height: 60px;
+      color: #200c59;
+      border-color: #200c59;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+    .Mui-selected {
+      color: #fff;
+      border-color: #fff;
+      background: linear-gradient(131deg, #e82eff 0%, #1c0a56 100%);
+    }
+    .MuiPaginationItem-previousNext {
+      color: #fff;
+      border-color: #fff;
+      width: 219px;
+      height: 60px;
+      background: linear-gradient(103deg, #e82eff 0%, #1c0a56 100%);
+    }
+        @media (max-width: 760px) {
+          .MuiPaginationItem-root {
+            display: flex;
+            align-items: center;
+            font-size: 10px;
+            margin-right: 2px;
+            width: 10px;
+            height: 33px;
+          }
+
+          .MuiPaginationItem-previousNext {
+            font-size: 8px;
+            width: 47px;
+            margin-right: 0;
+          }
+        }
+  }

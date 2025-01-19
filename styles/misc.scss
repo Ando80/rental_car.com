@@ -1,0 +1,14 @@
+span.MuiSlider-root {
+  @apply rounded--30 h-[8px];
+  &.Mui-disabled {
+    .MuiSlider-track {
+      @apply border-none bg-primary-blue;
+    }
+    .MuiSlider-thumb {
+      @apply border-none bg-white;
+    }
+    .MuiSlider-rail {
+      @apply bg-[#2C0E83] opacity-100;
+    }
+  }
+}

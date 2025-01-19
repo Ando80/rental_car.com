@@ -3,7 +3,9 @@ import NavBar from "@/components/layout/NavBar";
 import Acceuil from "@/components/molecules/acceuil/Acceuil";
 import TypeList from "@/components/type/TypeList";
 import Value from "@/components/valuesPage/values";
-
+import style from "./style.module.scss";
+import { ReqestBanner } from "@/components/shared/ReqestBanner";
+import SubFooter from "@/components/shared/SubFooter";
 interface HomeProps {
   searchParams: {
     title: string;
@@ -21,14 +23,14 @@ export default async function Home({ searchParams }: HomeProps) {
         <Acceuil />
         <Value />
       </div>
-
-      {/*<div>
-        <h1 className="text-4xl font-bold text-neutral-800 pt-3">
-          Nos Catégories
-        </h1>
+      <div>
+        <h1 className={style.title}>Nos categories</h1>
 
         <TypeList types={types} />
-      </div>*/}
+      </div>
+      <ReqestBanner />
+
+      <SubFooter />
     </>
   );
 }

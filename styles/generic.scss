@@ -1,0 +1,99 @@
+.container {
+  width: 100%;
+}
+
+@media (min-width: 360px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  .container {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 700px) {
+  .container {
+    max-width: 700px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 750px;
+  }
+}
+
+@media (min-width: 905px) {
+  .container {
+    max-width: 905px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1600px;
+  }
+}
+
+.request-banner {
+  .section-title,
+  .section-caption {
+    @apply text-white;
+  }
+}
+
+.global-page-hero {
+  background-image: url('/background/contact-banner.png');
+  padding-top: var(--sub-header-height);
+
+  &.team {
+    background-image: url('/background/team-banner.png');
+  }
+  &.contact {
+    background-image: url('/background/contact-banner.png');
+  }
+  &.projects {
+    background-image: url('/background/project-banner.png');
+  }
+  &.our-values {
+    background-image: url('/background/our-values-banner.png');
+  }
+  &.what\'s-hot {
+    background-image: url("/background/what's-hot-banner.png");
+  }
+}
+.request-services-banner,
+.single-project-banner,
+.request-banner {
+  background-image: url('/background/our-process.png');
+  @apply bg-cover bg-center bg-no-repeat;
+}
+.team-details,
+.our-experience-widget {
+  background-image: url('/background/our-process.png');
+  @apply bg-cover bg-right bg-no-repeat;
+}
+
+// .team-card:not(:first-child) > .team-details {
+//   @apply hidden;
+
+// }
+
+// .team-details {
+//   clip-path: polygon(11% 0, 100% 0, 100% 100%, 10% 100%, 10% 76%, 0 70%, 10% 60%);
+//   ::before {
+//     content: "";
+//     width: 10px;
+//     height: 10px;
+//     left: 0;
+//   }
+// }

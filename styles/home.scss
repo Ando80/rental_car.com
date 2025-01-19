@@ -6,7 +6,7 @@
         rgba(32, 12, 89, 0),
         rgba(32, 12, 89, 0.33)
       ),
-      url("/background/hero-free-bg.png");
+      url('/background/hero-free-bg.png');
     @apply h-[var(--screenWithoutHeader)] bg-cover bg-right-bottom bg-no-repeat text-white;
 
     // @media (max-width: 640px) {
@@ -49,7 +49,7 @@
   }
 
   .home-process {
-    background-image: url("/background/our-process.png");
+    background-image: url('/background/our-process.png');
     @apply flex w-full flex-col justify-between gap-5 px-2 py-12 md:px-12 xl:flex-row xl:gap-16 xl:px-20 xl:py-20;
 
     .process-card {
@@ -66,7 +66,7 @@
     }
   }
   .home-news {
-    background-image: url("/background/our-latest-news.png");
+    background-image: url('/background/our-latest-news.png');
     @apply px-8 py-12 xl:px-20 xl:py-20;
   }
 

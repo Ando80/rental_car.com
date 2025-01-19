@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,6 +19,13 @@ const config = {
     },
     extend: {
       colors: {
+        "primary-pink": "#200C59",
+        "primary-light-pink": "#471BAE",
+        "secondary-pink": "#7D65A5",
+        "third-pink": "#B61C92",
+        "primary-blue": "#00B7FF",
+        "primary-gray": "#BABABA",
+        "primary-light-gray": "#E1E0E2",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,6 +60,20 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      boxShadow: {
+        // ELEVATION DARK
+        "elevation-dark-1": "var(--elevation-dark-1)",
+        "elevation-dark-2": "var(--elevation-dark-2)",
+        "elevation-dark-3": "var(--elevation-dark-3)",
+        "elevation-dark-4": "var(--elevation-dark-4)",
+        "elevation-dark-5": "var(--elevation-dark-5)",
+        // ELEVATION light
+        "elevation-light-1": "var(--elevation-light-1)",
+        "elevation-light-2": "var(--elevation-light-2)",
+        "elevation-light-3": "var(--elevation-light-3)",
+        "elevation-light-4": "var(--elevation-light-4)",
+        "elevation-light-5": "var(--elevation-light-5)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -75,6 +96,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

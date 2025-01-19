@@ -1,4 +1,5 @@
 import { getTypeById } from "@/actions/getTypeById";
+import NavBar from "@/components/layout/NavBar";
 import AddTypeForm from "@/components/type/AddTypeForm";
 import { auth } from "@clerk/nextjs/server";
 
@@ -15,6 +16,7 @@ const Type = async ({ params }: TypePageProps) => {
   if (type && type.userId !== userId) return <div>Access denied...</div>;
   return (
     <div>
+      <NavBar />
       <AddTypeForm type={type} />
     </div>
   );

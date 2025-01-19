@@ -6,20 +6,26 @@ import style from "./style.module.scss";
 
 const Acceuil = () => {
   return (
-    <div className={style.hero} style={{ height: "95vh", width: "100vw" }}>
-      <PagePadded>
-        <div className={style.content}>
-          <h2 className={style.subtitle}>
-            Simplifier vos Déménagements avec notre flotte de confiance
-          </h2>
-          <p className={style.description}>
-            Des véhicules adaptés à tous vos besoins, pour des trajets sans
-            soucis.
-          </p>
+    <>
+      <div className={style.hero} style={{ height: "95vh", width: "100vw" }}>
+        <div className={style.header}>
+          <h1 className={style.head}>PROTENDER</h1>
+          <p className={style.para}> Contact : protender@gmail.com</p>
         </div>
-        <Illustration />
-      </PagePadded>
-    </div>
+        <PagePadded>
+          <div className={style.content}>
+            <h2 className={style.subtitle}>
+              Simplifier vos Déménagements avec notre flotte de confiance
+            </h2>
+            <p className={style.description}>
+              Des véhicules adaptés à tous vos besoins, pour des trajets sans
+              soucis.
+            </p>
+          </div>
+          <Illustration />
+        </PagePadded>
+      </div>
+    </>
   );
 };
 

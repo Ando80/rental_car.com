@@ -20,6 +20,7 @@ import { differenceInCalendarDays } from "date-fns";
 import { useAuth } from "@clerk/nextjs";
 import useLocateEngin from "@/hooks/useLocationEngin";
 import moment from "moment";
+import Image from "next/image";
 
 interface MyLocationClientProps {
   location: Location & { Engin: Engin | null } & { Type: Type | null };
@@ -112,10 +113,11 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
         <CardContent className="flex flex-col gap-4">
           <div className="aspect-square overflow-hidden relative h-[200px] rounded-lg">
             {Engin.image ? (
-              <img
+              <Image
                 src={Engin.image}
                 alt={Engin.registration}
-                className="object-cover"
+                className="h-full w-full object-cover"
+                layout="fill"
               />
             ) : null}
           </div>
@@ -152,8 +154,8 @@ const MyLocationClient: React.FC<MyLocationClientProps> = ({ location }) => {
                   Payé {location.totalPrice} Ariary - Engin Réservé
                 </div>
               ) : (
-                <div className="text-rose-500">
-                  Non payé {location.totalPrice} Ariary - Engin Non Réservé
+                <div className="text-teal-500">
+                  Payé{location.totalPrice} Ariary - Engin Réservé
                 </div>
               )}
             </div>

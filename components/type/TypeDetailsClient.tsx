@@ -6,6 +6,7 @@ import { TypeWithEngin } from "./AddTypeForm";
 import EnginCard from "../engin/EnginCard";
 import React from "react";
 import Image from "next/image";
+import style from "./style.module.scss";
 const TypeDetailsClient = ({
   type,
   locations,
@@ -14,27 +15,32 @@ const TypeDetailsClient = ({
   locations?: Location[];
 }) => {
   return (
-    <div className="flex flex-col pb-2">
-      <div className="aspect-square overflow-hidden relative w-full h-[100px] md:h-[400px] rounded-lg">
-        <Image src={type.image} alt={type.title} width={1920} height={1080} />
+    <>
+      <div>
+        <h1 className={style.title}>{type.title}</h1>
+      </div>
+      <div
+        className={`h-[65%] w-[100%] flex flex-col items-center mt-16 justify-center ${style.image}`}
+      >
+        <figure className="rounded-2xl border-4 border-gray-300 relative my-12 aspect-video w-4/5 overflow-hidden object-cover ml-30">
+          <Image
+            src={type.image}
+            alt={type.title}
+            layout="fill"
+            className="h-full w-full object-cover"
+          />
+        </figure>
       </div>
 
       <div>
-        <h3 className="font-semibold text-xl md:text-3xl pt-3 text-orange-900">
-          {type.title}
-        </h3>
-        <h2 className="font-semibold text-lg mt-4 mb-2 pt-2">
-          À PROPOS DE CETTE CATÉGORIE
-        </h2>
-        <p className="text-primary/90 mb-2">{type.description}</p>
+        <h1 className={style.title}>Details CATÉGORIE</h1>
+        <p className={style.valueDesc}>{type.description}</p>
       </div>
       <div>
         {!!type.engins.length && (
           <div>
-            <h3 className="text-lg font-semibold my-4">
-              Les engins de cette catégorie
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <h1 className={style.title}>Les engins de cette catégorie</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-24">
               {type.engins.map((engin) => {
                 return (
                   <EnginCard
@@ -49,7 +55,7 @@ const TypeDetailsClient = ({
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import { getTypesByUserId } from "@/actions/getTypeByUserId";
+import NavBar from "@/components/layout/NavBar";
 import TypeList from "@/components/type/TypeList";
 
 const MyTypes = async () => {
@@ -7,7 +8,10 @@ const MyTypes = async () => {
   if (!types) return <div>Pas de categorie trouver</div>;
   return (
     <div>
-      <h2 className="text-exl font-semibold">Voici vos propriétés</h2>
+      <NavBar />
+      <h2 className="text-center font-bold text-indigo-950 text-5xl mt-24">
+        Voici vos propriétés
+      </h2>
       <TypeList types={types} />
     </div>
   );

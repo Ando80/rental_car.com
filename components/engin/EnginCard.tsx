@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { DatePickerWithRange } from "./DateRangePicker"; // Import du composant de sélection de date unique
 import { Checkbox } from "../ui/checkbox";
 import useLocateEngin from "@/hooks/useLocationEngin";
+import style from "./style.module.scss";
 
 interface EnginCardProps {
   type?: Type & {
@@ -165,29 +166,34 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>{engin.registration}</CardTitle>
-          <CardDescription>{engin.description}</CardDescription>
+          <CardTitle className={style.registration}>
+            {engin.registration}
+          </CardTitle>
+          <CardDescription className={style.desc}>
+            {engin.description}
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="aspect-square overflow-hidden relative h-[200px] rounded-lg">
             {engin.image ? (
-              <img
+              <Image
                 src={engin.image}
                 alt={engin.registration}
-                className="object-cover"
+                className="h-full w-full object-cover"
+                layout="fill"
               />
             ) : null}
           </div>
           <Separator />
 
           <div className="flex gap-4 justify-between">
-            <div>
+            <div className={style.desc}>
               Prix de location:{" "}
               <span className=" font-bold">{engin.enginPrice} Ariary</span>
               <span className="text-xs">/24hrs</span>
             </div>
             {!!engin.driverPrice && (
-              <div>
+              <div className={style.desc}>
                 Prix moniteur:{" "}
                 <span className="font-bold">{engin.driverPrice} Ariary</span>
               </div>
@@ -229,6 +235,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                   onClick={() => handleLocateEngin()}
                   disabled={locationIsLoading}
                   type="button"
+                  className=" fixed-bottom-btn w-[150%] "
                 >
                   {locationIsLoading ? (
                     <Loader2 className="mr-2 h-4 w-4" />

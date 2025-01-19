@@ -80,3 +80,23 @@
     text-align: left;
   }
 }
+
+.head {
+  color: white;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 38px;
+  margin-top: 66px;
+}
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.para {
+  margin-top: 66px;
+  color: white;
+  font-size: 18px;
+  letter-spacing: 1.9px;
+}

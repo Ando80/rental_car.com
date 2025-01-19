@@ -1,5 +1,6 @@
 import { getLocations } from "@/actions/getLocations";
 import { getTypeById } from "@/actions/getTypeById";
+import NavBar from "@/components/layout/NavBar";
 import TypeDetailsClient from "@/components/type/TypeDetailsClient";
 
 interface TypeDetailsProps {
@@ -17,6 +18,7 @@ const TypeDetails = async ({ params }: TypeDetailsProps) => {
 
   return (
     <div>
+      <NavBar />
       <TypeDetailsClient type={type} locations={locations} />
     </div>
   );

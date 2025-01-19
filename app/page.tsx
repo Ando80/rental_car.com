@@ -25,7 +25,6 @@ export default async function Home({ searchParams }: HomeProps) {
       </div>
       <div>
         <h1 className={style.title}>Nos categories</h1>
-
         <TypeList types={types} />
       </div>
       <ReqestBanner />

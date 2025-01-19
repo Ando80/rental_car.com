@@ -8,12 +8,12 @@ import { Button } from "../ui/button";
 import SearchInput from "../SearchInput";
 import { ModeToggle } from "../theme-toogle";
 import { NavMenu } from "./NavMenu";
-
+import style from "./style.module.scss";
 const NavBar = () => {
   const router = useRouter();
   const { userId } = useAuth();
   return (
-    <div className="sticky top-0 border border-b-primary/5 bg-secondary">
+    <div className={`sticky top-0  bg-secondary ${style.head}`}>
       <Container>
         <div className="flex justify-between items-center">
           <div

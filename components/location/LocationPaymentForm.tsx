@@ -21,7 +21,6 @@ import { endOfDay, isWithinInterval, startOfDay } from "date-fns";
 
 interface LocationPaymentFormProps {
   clientSecret: string;
-  handleSetPaymentSuccess: (value: boolean) => void;
 }
 type DateRangeType = {
   startDate: Date;
@@ -58,10 +57,7 @@ function hasOverlap(
   return false;
 }
 
-const LocationPaymentForm = ({
-  clientSecret,
-  handleSetPaymentSuccess,
-}: LocationPaymentFormProps) => {
+const LocationPaymentForm = ({ clientSecret }: LocationPaymentFormProps) => {
   const { locationEnginData, resetLocateEngin } = useLocateEngin();
   const stripe = useStripe();
   const elements = useElements();
@@ -69,26 +65,24 @@ const LocationPaymentForm = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (!stripe) {
+    if (!stripe || !clientSecret) {
       return;
     }
-    if (!clientSecret) {
-      return;
-    }
-    handleSetPaymentSuccess(false);
     setIsLoading(false);
-  }, [stripe, clientSecret, handleSetPaymentSuccess]);
+  }, [stripe, clientSecret]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Redirection immédiate après le clic sur le bouton
+    router.push("/confirmation");
 
     if (!stripe || !elements || !locationEnginData) {
       return;
     }
 
     try {
-      // Vérifier les dates de chevauchement sans dépendre de l'authentification
       const locations = await axios.get(
         `/api/location/${locationEnginData.engin.id}`
       );
@@ -112,7 +106,6 @@ const LocationPaymentForm = ({
         );
       }
 
-      // Effectuer le paiement sans dépendre de l'authentification
       stripe
         .confirmPayment({
           elements,
@@ -122,11 +115,9 @@ const LocationPaymentForm = ({
           if (!result.error) {
             axios
               .patch(`/api/location/${result.paymentIntent.id}`)
-              .then((res) => {
+              .then(() => {
                 toast.success("Engin réservé");
-                router.refresh();
                 resetLocateEngin();
-                handleSetPaymentSuccess(true);
                 setIsLoading(false);
               })
               .catch((error) => {

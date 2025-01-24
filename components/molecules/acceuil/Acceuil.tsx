@@ -68,13 +68,13 @@ export const Illustration = () => {
       <figure className="relative h-full w-full max-w-[750px]">
         <img
           ref={cupRef}
-          className="absolute bottom-[40%] left-[18%] z-[3] w-[20%]"
+          className="absolute bottom-[47%] left-[18%] z-[3] w-[20%]"
           src="/background/maison.png"
           alt="Maison"
         />
         <img
           ref={laptopRef}
-          className="absolute bottom-[7%] right-[14%] z-[3] w-[80%]"
+          className="absolute bottom-[5%] right-[14%] z-[3] w-[80%]"
           src="/background/voiture.png"
           alt="Voiture"
         />

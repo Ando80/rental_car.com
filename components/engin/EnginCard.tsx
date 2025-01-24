@@ -235,7 +235,7 @@ const EnginCard = ({ type, engin, locations = [] }: EnginCardProps) => {
                   onClick={() => handleLocateEngin()}
                   disabled={locationIsLoading}
                   type="button"
-                  className=" fixed-bottom-btn w-[150%] "
+                  className=" fixed-bottom-btn w-[120%] "
                 >
                   {locationIsLoading ? (
                     <Loader2 className="mr-2 h-4 w-4" />
